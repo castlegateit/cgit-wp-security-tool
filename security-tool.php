@@ -268,6 +268,7 @@ class SecurityTool
 
             $wpdb->insert($table, [
                 'ip' => $address,
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'],
                 'date' => date('Y-m-d H:i:s'),
                 'user_id' => $user_id,
                 'user_name' => $name,
