@@ -15,6 +15,7 @@ License: MIT
 add_action('plugins_loaded', function() {
 
     // Includes
+    include dirname(__FILE__) . '/activation.php';
     include dirname(__FILE__) . '/security-tool.php';
 
     // Initialization
