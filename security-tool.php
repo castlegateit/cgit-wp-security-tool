@@ -17,6 +17,7 @@ class SecurityTool
         'disable_author_names' => true,
         'disable_php_in_uploads' => true,
         'disable_theme_editor' => true,
+        'default_user_warning' => true,
     ];
 
     /**
@@ -213,5 +214,23 @@ class SecurityTool
         add_action('init', function() {
             define('DISALLOW_FILE_EDIT', true);
         });
+    }
+
+    /**
+     * Default user warning
+     *
+     * If the default administrative username "admin" exists, site
+     * administrators will receive an stern rebuke.
+     */
+    private function defaultUserWarning()
+    {
+        if (username_exists('admin') && current_user_can('edit_users')) {
+            add_action('admin_notices', function() {
+                echo '<div class="error"><p><strong>Warning:</strong>'
+                    . ' For security reasons, you should delete, or change the'
+                    . ' username of, the default <code>admin</code> user'
+                    . ' account. &#x1f620;</p></div>';
+            });
+        }
     }
 }
