@@ -20,9 +20,9 @@ class SecurityTool
         'default_user_warning' => true,
         'login_log' => true,
         'login_lock' => true,
-        'login_max_attempts' => 3,
-        'login_retry_interval' => 300, // 300 seconds = 5 minutes
-        'login_lock_duration' => 3600, // 3600 seconds = 1 hour
+        'login_max_attempts' => 5,
+        'login_retry_interval' => 60, // 60 seconds
+        'login_lock_duration' => 60, // 60 seconds
     ];
 
     /**
