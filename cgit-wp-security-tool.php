@@ -12,12 +12,14 @@ License: MIT
 
 */
 
+$plugin_file = __FILE__;
+
+require __DIR__ . '/src/autoload.php';
+require __DIR__ . '/activation.php';
+
+/**
+ * Initialization
+ */
 add_action('plugins_loaded', function() {
-
-    // Includes
-    include dirname(__FILE__) . '/activation.php';
-    include dirname(__FILE__) . '/security-tool.php';
-
-    // Initialization
     Cgit\SecurityTool::getInstance();
 });

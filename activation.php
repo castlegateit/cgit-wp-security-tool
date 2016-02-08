@@ -3,7 +3,7 @@
 /**
  * Create a database table to log login attempts
  */
-register_activation_hook(__FILE__, function() {
+register_activation_hook($plugin_file, function() {
     global $wpdb;
 
     $table = $wpdb->prefix . 'cgit_security_logins';
