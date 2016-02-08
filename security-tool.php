@@ -199,7 +199,7 @@ class SecurityTool
     {
         $uploads = wp_upload_dir()['basedir'];
         $file = $this->joinPath([$uploads, '.htaccess']);
-        $config = '<Files *.php>Deny from all</Files>';
+        $config = "<Files *.php>\n    Deny from all\n</Files>";
 
         if (file_exists($file)) {
             return;
