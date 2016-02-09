@@ -7,6 +7,7 @@ Provides some basic WordPress security enhancements:
 *   Prevent PHP execution in the uploads directory.
 *   Disable the theme editor in the dashboard.
 *   Warn administrators if the default user account still exists.
+*   Prevent a user with the default "admin" username from being created.
 *   Log login attempts.
 *   Lock repeated failed login attempts from the same IP address.
 
@@ -20,6 +21,7 @@ The options are stored and set as an associative array, with the following defau
         'disable_php_in_uploads' => true,
         'disable_theme_editor' => true,
         'default_user_warning' => true,
+        'default_user_prevent' => true,
         'login_log' => true,
         'login_lock' => true,
         'login_max_attempts' => 3,

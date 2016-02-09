@@ -18,6 +18,7 @@ class SecurityTool
         'disable_php_in_uploads' => true,
         'disable_theme_editor' => true,
         'default_user_warning' => true,
+        'default_user_prevent' => true,
         'login_log' => true,
         'login_lock' => true,
         'login_max_attempts' => 5,
@@ -237,6 +238,59 @@ class SecurityTool
                     . ' account. &#x1f620;</p></div>';
             });
         }
+    }
+
+    /**
+     * Default admin user prevention
+     *
+     * Prevent a user account with the username "admin" from being created for
+     * this site.
+     */
+    private function defaultUserPrevent()
+    {
+        $admin = 'admin';
+        $message = '<strong>Error:</strong> For security reasons, you cannot'
+            . ' register a user called <code>' . $admin . '</code>.';
+        $id = 'cgit_security_default_user_prevent';
+
+        // Prevent "admin" from being created using wp_insert_user(). There is
+        // no elegant error handling here, so this simply dies on error.
+        add_filter('pre_user_login', function($login) use ($admin, $message) {
+            if ($login == $admin) {
+                wp_die($message);
+            }
+
+            return $login;
+        });
+
+        // Prevent "admin" from being created from the WordPress dashboard,
+        // with a friendly error message.
+        add_action(
+            'user_profile_update_errors',
+            function($errors, $update, $user) use ($admin, $id, $message) {
+                if ($user->user_login == $admin) {
+                    $errors->add($id, $message);
+                }
+            },
+            10,
+            3
+        );
+
+        // Prevent "admin" from being created from the WordPress login screen
+        // (when user registrations are permitted by the site settings) with a
+        // friendly error message.
+        add_filter(
+            'registration_errors',
+            function($errors, $login, $email) use ($admin, $id, $message) {
+                if ($login == $admin) {
+                    $errors->add($id, $message);
+                }
+
+                return $errors;
+            },
+            10,
+            3
+        );
     }
 
     /**
