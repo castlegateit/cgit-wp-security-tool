@@ -12,6 +12,8 @@ License: MIT
 
 */
 
+use Cgit\SecurityTool;
+
 $plugin_file = __FILE__;
 
 require __DIR__ . '/src/autoload.php';
@@ -20,6 +22,6 @@ require __DIR__ . '/activation.php';
 /**
  * Initialization
  */
-add_action('plugins_loaded', function() {
-    Cgit\SecurityTool::getInstance();
+add_action('init', function() {
+    $tool = SecurityTool::getInstance();
 });
