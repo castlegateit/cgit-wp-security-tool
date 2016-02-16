@@ -16,6 +16,7 @@ class SecurityTool
         'disable_author_archives' => true,
         'disable_author_names' => true,
         'disable_php_in_uploads' => true,
+        'disable_xmlrpc' => true,
         'disable_theme_editor' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
@@ -24,6 +25,17 @@ class SecurityTool
         'login_max_attempts' => 5,
         'login_retry_interval' => 60, // 60 seconds
         'login_lock_duration' => 60, // 60 seconds
+    ];
+
+    /**
+     * Permanent methods
+     *
+     * These methods specified by these options have to run every time,
+     * regardless of whether they are set to true or false.
+     */
+    private $permanentMethods = [
+        'disable_php_in_uploads',
+        'disable_xmlrpc',
     ];
 
     /**
@@ -92,11 +104,17 @@ class SecurityTool
             $this->options
         );
 
+
+
         // Run methods
         foreach ($this->options as $key => $value) {
             $method = $this->camelize($key);
 
-            if ($value && method_exists($this, $method)) {
+            // Run if value is true or if is a permanent method
+            if (
+                method_exists($this, $method) &&
+                ($value || in_array($key, $this->permanentMethods))
+            ) {
                 $this->$method();
             }
         }
@@ -134,6 +152,20 @@ class SecurityTool
         }
 
         return implode('/', $path);
+    }
+
+    /**
+     * Write to .htaccess
+     */
+    private function writeConfig($file, $marker, $content)
+    {
+        require_once(ABSPATH . 'wp-admin/includes/misc.php');
+
+        if (is_array($file)) {
+            $file = $this->joinPath($file);
+        }
+
+        insert_with_markers($file, $marker, $content);
     }
 
     /**
@@ -194,19 +226,49 @@ class SecurityTool
      * Disable PHP in the uploads directory
      *
      * Writes .htaccess to prevent PHP execution for any files within the
-     * uploads directory. If .htaccess already exists, this does nothing.
+     * uploads directory.
      */
     private function disablePhpInUploads()
     {
-        $uploads = wp_upload_dir()['basedir'];
-        $file = $this->joinPath([$uploads, '.htaccess']);
-        $config = "<Files *.php>\n    Deny from all\n</Files>";
+        $marker = 'Security Tool: disable PHP in uploads';
+        $file = [wp_upload_dir()['basedir'], '.htaccess'];
+        $indent = str_repeat(' ', 4);
+        $content = [];
 
-        if (file_exists($file)) {
-            return;
+        if ($this->options['disable_php_in_uploads']) {
+            $content = [
+                '<Files "*.php">',
+                $indent . 'Order Deny,Allow',
+                $indent . 'Deny from all',
+                '</Files>',
+            ];
         }
 
-        file_put_contents($file, $config);
+        $this->writeConfig($file, $marker, $content);
+    }
+
+    /**
+     * Disable XML RPC
+     *
+     * Blocks access to xmlrpc.php using .htaccess.
+     */
+    private function disableXmlrpc()
+    {
+        $marker = 'Security Tool: disable XML RPC';
+        $file = [ABSPATH, '.htaccess'];
+        $indent = str_repeat(' ', 4);
+        $content = [];
+
+        if ($this->options['disable_xmlrpc']) {
+            $content = [
+                '<Files "xmlrpc.php">',
+                $indent . 'Order Deny,Allow',
+                $indent . 'Deny from all',
+                '</Files>',
+            ];
+        }
+
+        $this->writeConfig($file, $marker, $content);
     }
 
     /**

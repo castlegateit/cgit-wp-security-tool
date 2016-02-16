@@ -18,6 +18,7 @@ $plugin_file = __FILE__;
 
 require __DIR__ . '/src/autoload.php';
 require __DIR__ . '/activation.php';
+require __DIR__ . '/deactivation.php';
 
 /**
  * Initialization

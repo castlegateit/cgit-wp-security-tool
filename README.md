@@ -5,6 +5,7 @@ Provides some basic WordPress security enhancements:
 *   Prevent exposure of usernames in author archives.
 *   Prevent exposure of usernames in XML feeds.
 *   Prevent PHP execution in the uploads directory.
+*   Block access to `xmlrpc.php`.
 *   Disable the theme editor in the dashboard.
 *   Warn administrators if the default user account still exists.
 *   Prevent a user with the default "admin" username from being created.
@@ -19,6 +20,7 @@ The options are stored and set as an associative array, with the following defau
         'disable_author_archives' => true,
         'disable_author_names' => true,
         'disable_php_in_uploads' => true,
+        'disable_xmlrpc' => true,
         'disable_theme_editor' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
