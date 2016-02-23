@@ -12,4 +12,6 @@ register_deactivation_hook($plugin_file, function() {
         'disable_php_in_uploads' => false,
         'disable_xmlrpc' => false,
     ]);
+
+    $tool->updateConfig();
 });

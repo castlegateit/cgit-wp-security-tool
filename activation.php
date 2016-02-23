@@ -1,5 +1,7 @@
 <?php
 
+use Cgit\SecurityTool;
+
 /**
  * Create a database table to log login attempts
  */
@@ -17,5 +19,10 @@ register_activation_hook($plugin_file, function() {
         success TINYINT
     )';
 
+    // Create necessary database tables
     $wpdb->query($sql);
+
+    // Update configuration
+    $tool = SecurityTool::getInstance();
+    $tool->updateConfig();
 });

@@ -28,12 +28,12 @@ class SecurityTool
     ];
 
     /**
-     * Permanent methods
+     * Configuration file options
      *
-     * These methods specified by these options have to run every time,
-     * regardless of whether they are set to true or false.
+     * These options involve writing configuration files, so should not run on
+     * every page load.
      */
-    private $permanentMethods = [
+    private $configOptions = [
         'disable_php_in_uploads',
         'disable_xmlrpc',
     ];
@@ -104,17 +104,31 @@ class SecurityTool
             $this->options
         );
 
-
-
         // Run methods
         foreach ($this->options as $key => $value) {
             $method = $this->camelize($key);
 
-            // Run if value is true or if is a permanent method
-            if (
-                method_exists($this, $method) &&
-                ($value || in_array($key, $this->permanentMethods))
-            ) {
+            // Skip options that affect configuration files
+            if (in_array($key, $this->configOptions)) {
+                continue;
+            }
+
+            // Run if value is true
+            if (method_exists($this, $method) && $value) {
+                $this->$method();
+            }
+        }
+    }
+
+    /**
+     * Update configuration files
+     */
+    public function updateConfig()
+    {
+        foreach ($this->configOptions as $option) {
+            $method = $this->camelize($option);
+
+            if (method_exists($this, $method)) {
                 $this->$method();
             }
         }
