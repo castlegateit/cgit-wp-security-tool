@@ -26,9 +26,9 @@ The options are stored and set as an associative array, with the following defau
         'default_user_prevent' => true,
         'login_log' => true,
         'login_lock' => true,
-        'login_max_attempts' => 3,
-        'login_retry_interval' => 300, // 300 seconds = 5 minutes
-        'login_lock_duration' => 3600, // 3600 seconds = 1 hour
+        'login_max_attempts' => 5,
+        'login_retry_interval' => 60, // 60 seconds
+        'login_lock_duration' => 60, // 60 seconds
     ];
 
 By default, all security settings are enabled. If you really want to disable something (e.g. to allow author archives), you can edit the options as follows:
