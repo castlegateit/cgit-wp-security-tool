@@ -17,7 +17,7 @@ class SecurityTool
         'disable_author_names' => true,
         'disable_php_in_uploads' => true,
         'disable_xmlrpc' => true,
-        'disable_theme_editor' => true,
+        'disable_file_mods' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
         'login_log' => true,
@@ -286,16 +286,42 @@ class SecurityTool
     }
 
     /**
-     * Disable theme editor
+     * Disable file modifications
      *
      * Prevents access to the theme editor in the WordPress dashboard to stop
-     * anyone editing the theme files from within WordPress.
+     * anyone editing the theme files from within WordPress. Also prevents
+     * automatic updates and other file modifications from within WordPress.
      */
-    private function disableThemeEditor()
+    private function disableFileMods()
     {
-        add_action('init', function() {
-            define('DISALLOW_FILE_EDIT', true);
-        });
+        $constants = [
+            'DISALLOW_FILE_EDIT' => true,
+            'DISALLOW_FILE_MODS' => true,
+            'WP_AUTO_UPDATE_CORE' => false,
+        ];
+        $missing = [];
+
+        foreach ($constants as $key => $value) {
+            if (!defined($key)) {
+                $str_value = $value ? 'true' : 'false';
+                $missing[] = "<code>define('$key', $str_value)</code>";
+
+                add_action('admin_init', function() use ($key, $value) {
+                    define($key, $value);
+                });
+            }
+        }
+
+        if ($missing) {
+            $list = implode(', ', $missing);
+            $message = '<p><strong>Warning:</strong> For security reasons,'
+                . ' please add the following constants to'
+                . ' <code>wp-config.php</code>: ' . $list . '.</p>';
+
+            add_action('admin_notices', function() use ($message) {
+                echo '<div class="error">' . $message . '</div>';
+            });
+        }
     }
 
     /**
