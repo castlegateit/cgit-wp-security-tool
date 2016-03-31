@@ -183,6 +183,17 @@ class SecurityTool
     }
 
     /**
+     * Display warning in Dashboard
+     */
+    private function displayWarning($message)
+    {
+        add_action('admin_notices', function() use ($message) {
+            echo '<div class="error"><p><strong>Warning:</strong> ' . $message
+                . '</p></div>';
+        });
+    }
+
+    /**
      * Disable author archives
      *
      * Author archives include the author's real username in the query string or
@@ -314,14 +325,9 @@ class SecurityTool
         }
 
         if ($missing) {
-            $list = implode(', ', $missing);
-            $message = '<p><strong>Warning:</strong> For security reasons,'
-                . ' please add the following constants to'
-                . ' <code>wp-config.php</code>: ' . $list . '.</p>';
-
-            add_action('admin_notices', function() use ($message) {
-                echo '<div class="error">' . $message . '</div>';
-            });
+            $this->displayWarning('For security reasons, please add the'
+                . ' following constants to <code>wp-config.php</code>: '
+                . implode(', ', $missing) . '.');
         }
     }
 
@@ -334,12 +340,9 @@ class SecurityTool
     private function defaultUserWarning()
     {
         if (username_exists('admin') && current_user_can('edit_users')) {
-            add_action('admin_notices', function() {
-                echo '<div class="error"><p><strong>Warning:</strong>'
-                    . ' For security reasons, you should delete, or change the'
-                    . ' username of, the default <code>admin</code> user'
-                    . ' account. &#x1f620;</p></div>';
-            });
+            $this->displayWarning('For security reasons, you should delete, or'
+                . ' change the username of, the default <code>admin</code> user'
+                . ' account. &#x1f620;');
         }
     }
 
