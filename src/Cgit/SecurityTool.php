@@ -278,6 +278,7 @@ class SecurityTool
                 '<Files "xmlrpc.php">',
                 $indent . 'Order Deny,Allow',
                 $indent . 'Deny from all',
+                $indent . 'Allow from 127.0.0.1',
                 '</Files>',
             ];
         }
