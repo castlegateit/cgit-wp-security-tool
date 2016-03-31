@@ -21,6 +21,7 @@ class SecurityTool
         'default_table_prefix_warning' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
+        'delete_readme_files' => true,
         'login_log' => true,
         'login_lock' => true,
         'login_max_attempts' => 5,
@@ -433,6 +434,28 @@ class SecurityTool
             10,
             3
         );
+    }
+
+    /**
+     * Delete README files
+     */
+    private function deleteReadmeFiles()
+    {
+        $files = [
+            'LICENSE',
+            'license.txt',
+            'README',
+            'readme.html',
+            'README.md',
+        ];
+
+        foreach ($files as $file) {
+            $path = $this->joinPath([ABSPATH, $file]);
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
     }
 
     /**

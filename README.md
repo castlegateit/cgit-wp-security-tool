@@ -10,6 +10,7 @@ Provides some basic WordPress security enhancements:
 *   Warn administrators if the default table prefix `wp_` is in use.
 *   Warn administrators if the default user account still exists.
 *   Prevent a user with the default "admin" username from being created.
+*   Delete common README and LICENSE files from document root.
 *   Log login attempts.
 *   Lock repeated failed login attempts from the same IP address.
 
@@ -26,6 +27,7 @@ The options are stored and set as an associative array, with the following defau
         'default_table_prefix_warning' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
+        'delete_readme_files' => true,
         'login_log' => true,
         'login_lock' => true,
         'login_max_attempts' => 5,
