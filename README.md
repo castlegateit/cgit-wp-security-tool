@@ -7,6 +7,7 @@ Provides some basic WordPress security enhancements:
 *   Prevent PHP execution in the uploads directory.
 *   Block access to `xmlrpc.php`.
 *   Disable the theme editor and other file modifications in the dashboard.
+*   Warn administrators if the default table prefix `wp_` is in use.
 *   Warn administrators if the default user account still exists.
 *   Prevent a user with the default "admin" username from being created.
 *   Log login attempts.
@@ -22,6 +23,7 @@ The options are stored and set as an associative array, with the following defau
         'disable_php_in_uploads' => true, // config option
         'disable_xmlrpc' => true, // config option
         'disable_file_mods' => true,
+        'default_table_prefix_warning' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
         'login_log' => true,

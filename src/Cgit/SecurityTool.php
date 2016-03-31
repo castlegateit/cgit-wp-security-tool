@@ -18,6 +18,7 @@ class SecurityTool
         'disable_php_in_uploads' => true,
         'disable_xmlrpc' => true,
         'disable_file_mods' => true,
+        'default_table_prefix_warning' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
         'login_log' => true,
@@ -348,6 +349,21 @@ class SecurityTool
             $this->displayWarning('For security reasons, please add the'
                 . ' following constants to <code>wp-config.php</code>: '
                 . implode(', ', $missing) . '.');
+        }
+    }
+
+    /**
+     * Default table prefix warning
+     */
+    private function defaultTablePrefixWarning()
+    {
+        global $table_prefix;
+
+        if ($table_prefix == 'wp_') {
+            $this->displayWarning('For security reasons, you should change the'
+                . ' database table prefix in <code>wp-config.php</code>. You'
+                . ' will need to update your database after you have done'
+                . ' this.');
         }
     }
 
