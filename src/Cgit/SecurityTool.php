@@ -187,6 +187,10 @@ class SecurityTool
      */
     private function displayWarning($message)
     {
+        if (!$this->isAdmin()) {
+            return;
+        }
+
         add_action('admin_notices', function() use ($message) {
             echo '<div class="error"><p><strong>Warning:</strong> ' . $message
                 . '</p></div>';
@@ -355,7 +359,7 @@ class SecurityTool
      */
     private function defaultUserWarning()
     {
-        if (username_exists('admin') && $this->isAdmin()) {
+        if (username_exists('admin')) {
             $this->displayWarning('For security reasons, you should delete, or'
                 . ' change the username of, the default <code>admin</code> user'
                 . ' account. &#x1f620;');
