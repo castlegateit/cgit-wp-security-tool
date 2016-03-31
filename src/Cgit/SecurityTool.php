@@ -194,6 +194,22 @@ class SecurityTool
     }
 
     /**
+     * Is current user an administrator?
+     *
+     * If the Tweak Tool is available, use its isAdmin() method. Otherwise,
+     * check for the ability to edit users.
+     */
+    private function isAdmin()
+    {
+        if (class_exists('\Cgit\TweakTool')) {
+            $tool = \Cgit\TweakTool::getInstance();
+            return $tool->isAdmin();
+        }
+
+        return current_user_can('edit_users');
+    }
+
+    /**
      * Disable author archives
      *
      * Author archives include the author's real username in the query string or
@@ -339,7 +355,7 @@ class SecurityTool
      */
     private function defaultUserWarning()
     {
-        if (username_exists('admin') && current_user_can('edit_users')) {
+        if (username_exists('admin') && $this->isAdmin()) {
             $this->displayWarning('For security reasons, you should delete, or'
                 . ' change the username of, the default <code>admin</code> user'
                 . ' account. &#x1f620;');
