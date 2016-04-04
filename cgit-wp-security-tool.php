@@ -14,7 +14,7 @@ License: MIT
 
 use Cgit\SecurityTool;
 
-$plugin_file = __FILE__;
+define('CGIT_SECURITY_TOOL_FILE', __FILE__);
 
 require __DIR__ . '/src/autoload.php';
 require __DIR__ . '/activation.php';

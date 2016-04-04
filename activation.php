@@ -5,7 +5,7 @@ use Cgit\SecurityTool;
 /**
  * Create a database table to log login attempts
  */
-register_activation_hook($plugin_file, function() {
+register_activation_hook(CGIT_SECURITY_TOOL_FILE, function() {
     global $wpdb;
 
     $table = $wpdb->prefix . 'cgit_security_logins';
