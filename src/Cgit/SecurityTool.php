@@ -338,7 +338,7 @@ class SecurityTool
         foreach ($constants as $key => $value) {
             if (!defined($key)) {
                 $str_value = $value ? 'true' : 'false';
-                $missing[] = "<code>define('$key', $str_value)</code>";
+                $missing[] = "<code>$key</code>";
 
                 add_action('admin_init', function() use ($key, $value) {
                     define($key, $value);
@@ -347,8 +347,8 @@ class SecurityTool
         }
 
         if ($missing) {
-            $this->displayWarning('For security reasons, please add the'
-                . ' following constants to <code>wp-config.php</code>: '
+            $this->displayWarning('For security reasons, please define the'
+                . ' following constants in <code>wp-config.php</code>: '
                 . implode(', ', $missing) . '.');
         }
     }
