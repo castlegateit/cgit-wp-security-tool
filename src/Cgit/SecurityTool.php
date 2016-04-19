@@ -47,6 +47,11 @@ class SecurityTool
     private $options = [];
 
     /**
+     * Configuration file indent
+     */
+    private $indent;
+
+    /**
      * Constructor
      *
      * Private constructor ...
@@ -54,6 +59,7 @@ class SecurityTool
     private function __construct($options = [])
     {
         $this->options = $this->defaultOptions;
+        $this->indent = str_repeat(' ', 4);
         $this->set($options);
     }
 
@@ -280,14 +286,13 @@ class SecurityTool
     {
         $marker = 'Security Tool: disable PHP in uploads';
         $file = [wp_upload_dir()['basedir'], '.htaccess'];
-        $indent = str_repeat(' ', 4);
         $content = [];
 
         if ($this->options['disable_php_in_uploads']) {
             $content = [
                 '<Files "*.php">',
-                $indent . 'Order Deny,Allow',
-                $indent . 'Deny from all',
+                $this->indent . 'Order Deny,Allow',
+                $this->indent . 'Deny from all',
                 '</Files>',
             ];
         }
@@ -304,15 +309,14 @@ class SecurityTool
     {
         $marker = 'Security Tool: disable XML RPC';
         $file = [ABSPATH, '.htaccess'];
-        $indent = str_repeat(' ', 4);
         $content = [];
 
         if ($this->options['disable_xmlrpc']) {
             $content = [
                 '<Files "xmlrpc.php">',
-                $indent . 'Order Deny,Allow',
-                $indent . 'Deny from all',
-                $indent . 'Allow from 127.0.0.1',
+                $this->indent . 'Order Deny,Allow',
+                $this->indent . 'Deny from all',
+                $this->indent . 'Allow from 127.0.0.1',
                 '</Files>',
             ];
         }
@@ -364,7 +368,6 @@ class SecurityTool
     {
         $marker = 'Security Tool: disable README files';
         $file = [ABSPATH, '.htaccess'];
-        $indent = str_repeat(' ', 4);
         $content = [];
 
         if ($this->options['disable_xmlrpc']) {
