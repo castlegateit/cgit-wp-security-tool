@@ -10,7 +10,7 @@ Provides some basic WordPress security enhancements:
 *   Warn administrators if the default table prefix `wp_` is in use.
 *   Warn administrators if the default user account still exists.
 *   Prevent a user with the default "admin" username from being created.
-*   Delete common README and LICENSE files from document root.
+*   Block access to common README and LICENSE files in document root.
 *   Log login attempts.
 *   Lock repeated failed login attempts from the same IP address.
 
