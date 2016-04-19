@@ -18,10 +18,10 @@ class SecurityTool
         'disable_php_in_uploads' => true,
         'disable_xmlrpc' => true,
         'disable_file_mods' => true,
+        'disable_readme_files' => true,
         'default_table_prefix_warning' => true,
         'default_user_warning' => true,
         'default_user_prevent' => true,
-        'delete_readme_files' => true,
         'login_log' => true,
         'login_lock' => true,
         'login_max_attempts' => 5,
@@ -38,6 +38,7 @@ class SecurityTool
     private $configOptions = [
         'disable_php_in_uploads',
         'disable_xmlrpc',
+        'disable_readme_files',
     ];
 
     /**
@@ -354,6 +355,31 @@ class SecurityTool
     }
 
     /**
+     * Disable README files
+     *
+     * Block access to README and LICENSE files in the document root common to
+     * WordPress installations and Git repositories.
+     */
+    private function disableReadmeFiles()
+    {
+        $marker = 'Security Tool: disable README files';
+        $file = [ABSPATH, '.htaccess'];
+        $indent = str_repeat(' ', 4);
+        $content = [];
+
+        if ($this->options['disable_xmlrpc']) {
+            $content = [
+                'RewriteEngine on',
+                'RewriteBase /',
+                'RewriteRule ^license.*$ - [R=404,NC,L]',
+                'RewriteRule ^readme.*$ - [R=404,NC,L]',
+            ];
+        }
+
+        $this->writeConfig($file, $marker, $content);
+    }
+
+    /**
      * Default table prefix warning
      */
     private function defaultTablePrefixWarning()
@@ -434,28 +460,6 @@ class SecurityTool
             10,
             3
         );
-    }
-
-    /**
-     * Delete README files
-     */
-    private function deleteReadmeFiles()
-    {
-        $files = [
-            'LICENSE',
-            'license.txt',
-            'README',
-            'readme.html',
-            'README.md',
-        ];
-
-        foreach ($files as $file) {
-            $path = $this->joinPath([ABSPATH, $file]);
-
-            if (file_exists($path)) {
-                unlink($path);
-            }
-        }
     }
 
     /**
