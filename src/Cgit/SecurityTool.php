@@ -370,7 +370,7 @@ class SecurityTool
         $file = [ABSPATH, '.htaccess'];
         $content = [];
 
-        if ($this->options['disable_xmlrpc']) {
+        if ($this->options['disable_readme_files']) {
             $content = [
                 'RewriteEngine on',
                 'RewriteBase /',
