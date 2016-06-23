@@ -235,7 +235,10 @@ class SecurityTool
         add_action('wp', function($wp) {
             if (
                 count($wp->query_vars) == 1 &&
-                array_key_exists('author', $wp->query_vars)
+                (
+                    array_key_exists('author', $wp->query_vars) ||
+                    array_key_exists('author_name', $wp->query_vars)
+                )
             ) {
                 global $wp_query;
 
