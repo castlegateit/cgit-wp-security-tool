@@ -1,5 +1,7 @@
 # Castlegate IT WP Security Tool #
 
+**Requires PHP 5.5.16 or greater**
+
 Provides some basic WordPress security enhancements:
 
 *   Prevent exposure of usernames in author archives.
