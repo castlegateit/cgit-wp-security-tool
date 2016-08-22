@@ -15,6 +15,7 @@ Provides some basic WordPress security enhancements:
 *   Block access to common README and LICENSE files in document root.
 *   Log login attempts.
 *   Lock repeated failed login attempts from the same IP address.
+*   Adds Google reCAPTCHA support.
 
 ## Options ##
 
@@ -36,6 +37,7 @@ $options = [
     'login_max_attempts' => 5,
     'login_retry_interval' => 60, // 60 seconds
     'login_lock_duration' => 60, // 60 seconds
+    'enable_google_recaptcha' => true,
 ];
 ~~~
 
@@ -76,3 +78,12 @@ add_action('after_switch_theme', function() {
     $tool->updateConfig();
 });
 ~~~
+
+## Google reCAPTCHA ##
+
+To enable Google reCAPTCHA for the WordPress login page you must define two constants with API key values provided by Google. Add the following to your `config.php` file:
+
+*   define('RECAPTCHA_SITE_KEY', 'Your reCAPTCHA site key.');
+*   define('RECAPTCHA_SECRET_KEY', 'Your reCAPTCHA secret key.');
+
+See: [https://www.google.com/recaptcha](https://www.google.com/recaptcha)
