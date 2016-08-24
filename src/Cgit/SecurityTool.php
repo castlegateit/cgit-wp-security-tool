@@ -27,6 +27,9 @@ class SecurityTool
         'login_max_attempts' => 5,
         'login_retry_interval' => 60, // 60 seconds
         'login_lock_duration' => 60, // 60 seconds
+        'enable_header_frame_origin' => true,
+        'enable_header_xss_protection' => true,
+        'enable_header_no_sniff' => true,
     ];
 
     /**
@@ -565,5 +568,44 @@ class SecurityTool
 
             return $user;
         }, 50, 3);
+    }
+
+    /**
+     * Sends the X-Frame-Origin header to limit rendering of pages to frames on
+     * the same domain/origin, for XSS protection.
+     *
+     * @return void
+     */
+    public function enableHeaderFrameOrigin()
+    {
+        if (!headers_sent()) {
+            send_frame_options_header();
+        }
+    }
+
+    /**
+     * Sends the X-XSS-Protection header to block detected XSS attempts when
+     * detected by supported browsers. Support is included in IE8+ & Webkit.
+     */
+    public function enableHeaderXssProtection()
+    {
+        if (!headers_sent()) {
+            header("X-XSS-Protection: 1; mode=block;");
+        }
+    }
+
+    /**
+     * Send a HTTP header to disable content type sniffing in browsers which
+     * support it. This prevents browsers from attempting to determine a mime
+     * type automatically, and forces rendering in the mime type provided by
+     * the server.
+     *
+     * @return void
+     */
+    public function enableHeaderNoSniff()
+    {
+        if (!headers_sent()) {
+            send_nosniff_header();
+        }
     }
 }
