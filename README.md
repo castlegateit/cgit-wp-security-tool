@@ -42,37 +42,23 @@ $options = [
 By default, all security settings are enabled. If you really want to disable something (e.g. to allow author archives), you can edit the options as follows:
 
 ~~~ php
-$tool = Cgit\SecurityTool::getInstance();
+add_filter('cgit_security_tool_options', function($options) {
+    $options['disable_author_archives'] => false,
+    $options['disable_author_names'] => false,
 
-// Change multiple options
-$tool->set([
-    'disable_author_archives' => false,
-    'disable_author_names' => false,
-]);
-
-// Change options individually
-$tool->set('disable_author_archives', false);
-$tool->set('disable_author_names', false);
+    return $options;
+});
 ~~~
 
 ## Configuration options ##
 
-Some options require the plugin to edit configuration files, including `.htaccess` files. The plugin will only do this on activation and deactivation. If you need to change these options, you will need to reactivate the plugin or call the `updateConfig()` method in your own plugin or theme:
+Some options require the plugin to edit configuration files, including `.htaccess` files. The plugin will only do this on activation and deactivation. If you need to change these options, you will need to reactivate the plugin or use the `FileTool` class directly:
 
 ~~~ php
 use Cgit\SecurityTool;
 
-// Plugin activation
-register_activation_hook($plugin_file, function() {
-    $tool = SecurityTool::getInstance();
-    $tool->set('disable_php_in_uploads', false);
-    $tool->updateConfig();
-});
+$tool = new FileTool();
 
-// Theme activation
-add_action('after_switch_theme', function() {
-    $tool = SecurityTool::getInstance();
-    $tool->set('disable_php_in_uploads', false);
-    $tool->updateConfig();
-});
+$tool->set('disable_php_in_uploads', false);
+$tool->update();
 ~~~

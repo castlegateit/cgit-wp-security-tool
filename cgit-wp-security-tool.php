@@ -5,24 +5,20 @@
 Plugin Name: Castlegate IT WP Security Tool
 Plugin URI: http://github.com/castlegateit/cgit-wp-security-tool
 Description: Adds various security enhancements to WordPress.
-Version: 1.3.1
+Version: 2.0
 Author: Castlegate IT
 Author URI: http://www.castlegateit.co.uk/
 License: MIT
 
 */
 
-use Cgit\SecurityTool;
+use Cgit\SecurityTool\Plugin;
 
-define('CGIT_SECURITY_TOOL_FILE', __FILE__);
+// Constants
+define('CGIT_SECURITY_TOOL_PLUGIN_FILE', __FILE__);
 
+// Load plugin
 require __DIR__ . '/src/autoload.php';
-require __DIR__ . '/activation.php';
-require __DIR__ . '/deactivation.php';
 
-/**
- * Initialization
- */
-add_action('init', function() {
-    $tool = SecurityTool::getInstance();
-});
+// Initialization
+Plugin::getInstance();
