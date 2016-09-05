@@ -1,12 +1,14 @@
 <?php
 
-namespace Cgit\SecurityTool;
+namespace Cgit\SecurityTool\Tools;
+
+use Cgit\SecurityTool\Tool;
 
 /**
  * Provide the facility to log login attempts and to block access to the login
  * form following repeated failed login attempts.
  */
-class LoginTool extends Tool
+class Login extends Tool
 {
     /**
      * Default options

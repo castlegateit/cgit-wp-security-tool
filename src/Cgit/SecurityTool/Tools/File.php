@@ -1,12 +1,14 @@
 <?php
 
-namespace Cgit\SecurityTool;
+namespace Cgit\SecurityTool\Tools;
+
+use Cgit\SecurityTool\Tool;
 
 /**
  * Block access to various potentially sensitive files. Because this involves
  * writing to files, this should not run every time that WP loads.
  */
-class FileTool extends Tool
+class File extends Tool
 {
     /**
      * Default options

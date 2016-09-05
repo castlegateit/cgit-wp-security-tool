@@ -1,12 +1,14 @@
 <?php
 
-namespace Cgit\SecurityTool;
+namespace Cgit\SecurityTool\Tools;
+
+use Cgit\SecurityTool\Tool;
 
 /**
  * Disable various default WP features and provide warnings about those that
  * cannot be changed here.
  */
-class FeatureTool extends Tool
+class Feature extends Tool
 {
     /**
      * Default options

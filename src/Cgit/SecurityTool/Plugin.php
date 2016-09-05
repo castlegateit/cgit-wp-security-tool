@@ -13,9 +13,11 @@ class Plugin
      * @var array
      */
     private $tools = [
-        'FeatureTool',
-        'FileTool',
-        'LoginTool',
+        'Feature',
+        'File',
+        'Login',
+        'Recaptcha',
+        'Header',
     ];
 
     /**
@@ -91,7 +93,7 @@ class Plugin
         $wpdb->query($sql);
 
         // Update configuration files
-        $tool = new FileTool();
+        $tool = new File();
         $tool->update();
     }
 
@@ -105,7 +107,7 @@ class Plugin
      */
     public function deactivate()
     {
-        $tool = new FileTool();
+        $tool = new File();
 
         $tool->set([
             'disable_php_in_uploads' => false,
@@ -129,7 +131,7 @@ class Plugin
     {
         add_action('init', function() {
             foreach ($this->tools as $tool) {
-                $name = '\\Cgit\\SecurityTool\\' . $tool;
+                $name = '\\Cgit\\SecurityTool\\Tools\\' . $tool;
 
                 if (class_exists($name)) {
                     $obj = new $name();
