@@ -16,7 +16,7 @@ class Header extends Tool
      * @var array
      */
     protected $defaults = [
-        'enable_frame_origin' => true,
+        'enable_frame_options' => true,
         'enable_xss_protection' => true,
         'enable_no_sniff' => true,
     ];
@@ -35,12 +35,12 @@ class Header extends Tool
     }
 
     /**
-     * Sends the X-Frame-Origin header to limit rendering of pages to frames on
+     * Sends the X-Frame-Options header to limit rendering of pages to frames on
      * the same domain/origin. Provides XSS protection.
      *
      * @return void
      */
-    public function enableFrameOrigin()
+    public function enableFrameOptions()
     {
         if (!headers_sent()) {
             send_frame_options_header();
