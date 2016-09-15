@@ -2,6 +2,8 @@
 
 namespace Cgit\SecurityTool;
 
+use Cgit\SecurityTool\Tools\File;
+
 class Plugin
 {
     /**
@@ -129,7 +131,7 @@ class Plugin
      */
     private function activateTools()
     {
-        add_action('init', function() {
+        add_action('init', function () {
             foreach ($this->tools as $tool) {
                 $name = '\\Cgit\\SecurityTool\\Tools\\' . $tool;
 
