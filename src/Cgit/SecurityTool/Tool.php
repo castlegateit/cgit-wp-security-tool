@@ -140,6 +140,6 @@ abstract class Tool
             return $tool->isAdmin();
         }
 
-        return current_user_can('update_core');
+        return current_user_can('activate_plugins');
     }
 }
