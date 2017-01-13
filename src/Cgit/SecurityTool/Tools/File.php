@@ -19,6 +19,7 @@ class File extends Tool
         'disable_php_in_uploads' => true,
         'disable_xmlrpc' => true,
         'disable_readme_files' => true,
+        'disable_directory_indexes' => true,
     ];
 
     /**
@@ -137,6 +138,28 @@ class File extends Tool
         }
 
         $this->writeConf($file, $marker, $content);
+    }
+
+    /**
+     * Disable directory indexes
+     *
+     * Prevents users viewing directory indexes anywhere on the site in their
+     * browser by writing an option to the main .htaccess file.
+     *
+     * @return void
+     */
+    private function disableDirectoryIndexes()
+    {
+        $marker = 'Security Tool: disable directory indexes';
+        $file = [ABSPATH. '.htaccess'];
+
+        if (!$this->options('disable_directory_indexes')) {
+            $this->writeConf($file, $marker, []);
+        }
+
+        $this->writeConf($file, $marker, [
+            'Options -Indexes',
+        ]);
     }
 
     /**
