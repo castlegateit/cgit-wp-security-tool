@@ -153,7 +153,7 @@ class File extends Tool
         $marker = 'Security Tool: disable directory indexes';
         $file = [ABSPATH. '.htaccess'];
 
-        if (!$this->options('disable_directory_indexes')) {
+        if (!$this->options['disable_directory_indexes']) {
             $this->writeConf($file, $marker, []);
         }
 
