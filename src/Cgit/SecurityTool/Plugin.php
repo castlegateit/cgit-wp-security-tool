@@ -19,6 +19,7 @@ class Plugin
         'File',
         'Login',
         'Recaptcha',
+        'Setting',
         'Header',
     ];
 

@@ -97,11 +97,21 @@ class Recaptcha extends Tool
      */
     public function disable()
     {
-        // Disable if any of these plugins are active
+        // Disable if any of these plugins are active.
         $plugins = ['two-factor-auth/two-factor-login.php'];
 
+        // Check local plugins.
         if (array_intersect($plugins, get_option('active_plugins'))) {
             $this->disabled = true;
+        }
+
+        // Check network activated plugins
+        if (function_exists('is_plugin_active_for_network')) {
+            foreach ($plugins as $plugin) {
+                if (is_plugin_active_for_network($plugin)) {
+                    $this->disabled = true;
+                }
+            }
         }
     }
 
