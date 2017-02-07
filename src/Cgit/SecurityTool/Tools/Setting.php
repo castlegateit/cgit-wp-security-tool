@@ -16,9 +16,7 @@ class Setting extends Tool
      * @var array
      */
     protected $defaults = [
-        'site_email' => 'dev@castlegateit.co.uk',
         'site_email_warning' => true,
-        'admin_email' => 'dev@castlegateit.co.uk',
         'admin_email_warning' => true,
     ];
 
@@ -45,9 +43,26 @@ class Setting extends Tool
      */
     protected function siteEmailWarning()
     {
+        $docs = 'https://github.com/castlegateit/cgit-wp-security-tool';
+        $docs.= '#site-email-warning';
+
+        if (!defined('CGIT_SEC_SITE_EMAIL')) {
+            self::displayWarning(
+                'The required constant, <code>CGIT_SEC_SITE_EMAIL</code> is '
+                .'not set in your configuration file. This constant is used to '
+                .'check that at your WordPress site email address matches a '
+                .'predefined value. Please set this constant\'s value to your '
+                .'preferred email address. <br />See the <a href="'
+                .$docs.'" target="_blank">documentation</a> for more '
+                .'information.'
+            );
+
+            return;
+        }
+
         // Admin email.
         $current_email = get_option('admin_email');
-        $desired_email = $this->options['site_email'];
+        $desired_email = CGIT_SEC_SITE_EMAIL;
 
         // Settings URL
         $settings_url = admin_url('options-general.php');
@@ -72,11 +87,28 @@ class Setting extends Tool
      */
     protected function adminEmailWarning()
     {
+        $docs = 'https://github.com/castlegateit/cgit-wp-security-tool';
+        $docs.= '#admin-email-warning';
+
+        if (!defined('CGIT_SEC_ADMIN_EMAIL')) {
+            self::displayWarning(
+                'The required constant, <code>CGIT_SEC_ADMIN_EMAIL</code> is '
+                .'not set in your configuration file. This constant is used to '
+                .'check that at least one administrator user exists with an '
+                .'email address which matches a predefined value. Please set '
+                .'this constant\'s value to your preferred email address. '
+                .'<br />See the <a href="'.$docs.'" target="_blank">'
+                .'documentation</a> for more information.'
+            );
+
+            return;
+        }
+
         // Administrator users.
         $administrators = get_users(['role' => 'administrator']);
 
         // Desired administrator email.
-        $desired_email = $this->options['admin_email'];
+        $desired_email = CGIT_SEC_ADMIN_EMAIL;
 
         foreach ($administrators as $user) {
             if ($user->user_email == $desired_email) {

@@ -100,17 +100,26 @@ define('WP_AUTO_UPDATE_CORE', 'minor');
 
 Option: `site_email_warning` - Default: `true`
 
-This option warns the administrators if the site's email address does not match a predefined value. It allows developers to ensure important emailos such as update notifications are sent to a preferred location.
+This option warns the administrators if the site's email address does not match a predefined value. It allows developers to ensure important emails such as update notifications are sent to a preferred location.
 
-The preferred site email address can be set with the `site_email` option.
+The desired email address can be set by defining the `CGIT_SEC_SITE_EMAIL` constant as shown below:
+
+~~~ php
+define('CGIT_SEC_SITE_EMAIL', 'example@domain.com');
+~~~
 
 ### Admin email warning ###
 
 Option: `admin_email_warning` - Default: `true`
 
-This option warns the administrators if the none of the site's administrator users have an email address matching a predefined value. It allows developers to ensure at least one user account is accessible if a feature such as two factor authentication is enabled.
+This option warns administrators if the none of the site's admin users have an email address matching a predefined value. It allows developers to ensure that at least one user account is accessible if a feature such as two factor authentication is enabled.
 
-The desired administrator email address can be set with the `admin_email` option.
+The desired administrator email address can be set by defining the `CGIT_SEC_ADMIN_EMAIL` constant as shown below:
+
+~~~ php
+define('CGIT_SEC_ADMIN_EMAIL', 'example@domain.com');
+~~~
+
 
 ### Disable author archives ###
 
