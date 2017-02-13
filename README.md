@@ -26,12 +26,14 @@ The options are stored and set as an associative array, with the following defau
 
 ~~~ php
 $options = [
+    'automatic_update_warning' => true,
     'disable_author_archives' => true,
     'disable_author_names' => true,
     'disable_php_in_uploads' => true, // config option
     'disable_xmlrpc' => true, // config option
     'disable_readme_files' => true,
-    'disable_file_mods' => true,
+    'disable_file_mods' => false,
+    'disable_file_edit' => true,
     'default_table_prefix_warning' => true,
     'default_user_warning' => true,
     'default_user_prevent' => true,
@@ -75,6 +77,18 @@ $tool->update();
 ~~~
 
 ## Security enhancements ##
+
+### Automatic update warnings ###
+
+Option: `automatic_update_warning` - Default: `true`
+
+This option warns administrators if automatic updates are disabled or the configuration constant contains an invalid value, preventing updates from running. A warning will also be displayed if automatic updates are configured to include development or major updates, which may include site-breaking changes.
+
+It's recommended to use the default automatic update settings, which can be manually defined using the constant below. The `'minor'` configuration value offers the best balance of security updates without risking major changes which may break the website.
+
+~~~ php
+define('WP_AUTO_UPDATE_CORE', 'minor');
+~~~
 
 ### Disable author archives ###
 
@@ -120,16 +134,28 @@ This option blocks access to `license.txt` and `README.md` using `.htaccess`
 
 ### Disable file modifications ###
 
-Option: `disable_file_mods` - Default: `true` 
+Option: `disable_file_mods` - Default: `false` 
 
-WordPress core files, themes and plugins can be manipulated via the WordPress admin. When such features are not required they should be disabled to prevent any malicous user from escalating their privileges and gaining file system access.
+WordPress core files, themes and plugins can be manipulated via the WordPress. When such features are not required they should be disabled to prevent any malicous user from escalating their privileges and gaining file system access.
 
-This option disables editing of theme files, plugin files and core updates if the following constants are defined and set to `true`
+This option disables editing of theme files, plugin files if the following constant is defined and set to `true`. 
+
+'Note:' This option will also disable automatic updates.
+
+~~~ php
+define('DISALLOW_FILE_MODS', true);
+~~~
+
+### Disable file edits ###
+
+Option: `disable_file_edit` - Default: `true` 
+
+WordPress themes and plugins can be manipulated via the WordPress admin. When such features are not required they should be disabled to prevent any malicous user from escalating their privileges and gaining file system access.
+
+This option disables editing of theme files, plugin files if the following constant is defined and set to `true`
 
 ~~~ php
 define('DISALLOW_FILE_EDIT', true);
-define('DISALLOW_FILE_MODS', true);
-define('WP_AUTO_UPDATE_CORE', true);
 ~~~
 
 ### Default table prefix warning ###
