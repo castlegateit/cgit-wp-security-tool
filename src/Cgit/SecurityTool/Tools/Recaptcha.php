@@ -93,14 +93,11 @@ class Recaptcha extends Tool
      * Checks if Google reCAPTCHA should be disabled and sets a variable.
      * It should be disabled in the presence of 2FA authentication.
      *
-     * @return bool
+     * @return void
      */
     public function disable()
     {
-        // Disable if any of these plugins are active
-        $plugins = ['two-factor-auth/two-factor-login.php'];
-
-        if (array_intersect($plugins, get_option('active_plugins'))) {
+        if (defined('TFA_MAIN_PLUGIN_PATH')) {
             $this->disabled = true;
         }
     }
