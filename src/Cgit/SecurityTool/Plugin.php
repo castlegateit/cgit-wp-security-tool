@@ -52,6 +52,9 @@ class Plugin
 
         // Activate the registered security tools
         $this->activateTools();
+
+        // Check for multisite network compatibility
+        $this->checkNetworkCompatible();
     }
 
     /**
@@ -80,9 +83,10 @@ class Plugin
     {
         global $wpdb;
 
-        $table = $wpdb->prefix . 'cgit_security_logins';
+        $table = $wpdb->base_prefix . 'cgit_security_logins';
         $sql = 'CREATE TABLE IF NOT EXISTS ' . $table . ' (
             login_id INT AUTO_INCREMENT PRIMARY KEY,
+            blog_id INT,
             ip VARCHAR(16),
             user_agent VARCHAR(512),
             date DATETIME,
@@ -93,6 +97,12 @@ class Plugin
 
         // Create necessary database tables
         $wpdb->query($sql);
+
+        // Update the database if it is not compatible with network sites
+        if (!self::networkCompatible()) {
+            $wpdb->query('ALTER TABLE ' . $table
+                . ' ADD blog_id INT AFTER login_id');
+        }
 
         // Update configuration files
         $tool = new File();
@@ -141,5 +151,46 @@ class Plugin
                 }
             }
         });
+    }
+
+    /**
+     * Check for and notify of network compatibility issues
+     *
+     * @return void
+     */
+    private function checkNetworkCompatible()
+    {
+        if (self::networkCompatible()) {
+            return;
+        }
+
+        add_action('admin_notices', function () {
+            ?>
+            <div class="error">
+                <p><strong>Warning:</strong> Please reactivate the Security Tool
+                plugin to update the database for compatibility with the latest
+                version of the plugin.</p>
+            </div>
+            <?php
+        });
+    }
+
+    /**
+     * Is the database table compatible with network sites?
+     *
+     * @return boolean
+     */
+    public static function networkCompatible()
+    {
+        global $wpdb;
+
+        $sample = $wpdb->get_row('SELECT * FROM ' . $wpdb->base_prefix
+            . 'cgit_security_logins');
+
+        if (array_key_exists('blog_id', $sample)) {
+            return true;
+        }
+
+        return false;
     }
 }

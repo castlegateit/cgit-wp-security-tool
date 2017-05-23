@@ -2,6 +2,7 @@
 
 namespace Cgit\SecurityTool\Tools;
 
+use Cgit\SecurityTool\Plugin;
 use Cgit\SecurityTool\Tool;
 
 /**
@@ -66,7 +67,7 @@ class Login extends Tool
             return $user;
         }
 
-        $table = $wpdb->prefix . 'cgit_security_logins';
+        $table = $wpdb->base_prefix . 'cgit_security_logins';
         $address = $_SERVER['REMOTE_ADDR'];
         $user_id = null;
         $success = 0;
@@ -76,14 +77,23 @@ class Login extends Tool
             $success = 1;
         }
 
-        $wpdb->insert($table, [
+        $data = [
             'ip' => $address,
             'user_agent' => $_SERVER['HTTP_USER_AGENT'],
             'date' => date('Y-m-d H:i:s'),
             'user_id' => $user_id,
             'user_name' => $name,
             'success' => $success,
-        ]);
+        ];
+
+        // Add the network site ID to the log entry if the database table
+        // supports it. Previous versions of the plugin did not support network
+        // sites, so this column may not exist.
+        if (Plugin::networkCompatible()) {
+            $data['blog_id'] = $wpdb->blogid;
+        }
+
+        $wpdb->insert($table, $data);
 
         return $user;
     }
