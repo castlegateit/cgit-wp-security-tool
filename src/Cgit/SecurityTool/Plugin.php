@@ -184,10 +184,16 @@ class Plugin
     {
         global $wpdb;
 
-        $sample = $wpdb->get_row('SELECT * FROM ' . $wpdb->base_prefix
-            . 'cgit_security_logins');
+        $database = DB_NAME;
+        $table = $wpdb->base_prefix . 'cgit_security_logins';
+        $result = $wpdb->query("
+            SELECT * FROM information_schema.COLUMNS
+            WHERE TABLE_SCHEMA = '$database'
+            AND TABLE_NAME = '$table'
+            AND COLUMN_NAME = 'blog_id'
+        ");
 
-        if (array_key_exists('blog_id', $sample)) {
+        if ($result) {
             return true;
         }
 
