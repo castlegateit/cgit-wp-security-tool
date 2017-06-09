@@ -160,7 +160,7 @@ class Plugin
      */
     private function checkNetworkCompatible()
     {
-        if (self::networkCompatible() && is_multisite()) {
+        if (self::networkCompatible() || !is_multisite()) {
             return;
         }
 
