@@ -19,6 +19,7 @@ Provides some WordPress and general security enhancements:
 *   Sends the `X-Frame-Origin` HTTP header.
 *   Sends the `X-XSS-Protection` HTTP header.
 *   Sends the `X-Content-Type-Options` HTTP header.
+*   Warn administrators if 2FA is disabled.
 
 ## Options ##
 
@@ -46,6 +47,8 @@ $options = [
     'enable_frame_options' => true,
     'enable_xss_protection' => true,
     'enable_no_sniff' => true,
+    'two_factor_auth_warning' => true, // all user roles
+    'two_factor_auth_admin_warning' => true, // administrator user role
 ];
 ~~~
 
@@ -92,7 +95,7 @@ define('WP_AUTO_UPDATE_CORE', 'minor');
 
 ### Disable author archives ###
 
-Option: `disable_author_archives` - Default: `true` 
+Option: `disable_author_archives` - Default: `true`
 
 This option disables all author archives and returns a HTTP `404` response for any author archive page. Out of the box, WordPress will generate per-user archives using the following URL structure:
 
@@ -102,15 +105,15 @@ More often than not, these are not required and provide an endpoint for username
 
 ### Disable author names ###
 
-Option: `disable_author_names` - Default: `true` 
+Option: `disable_author_names` - Default: `true`
 
-If a user's display name is not set, the author's username is used instead. This is shown in links, archives, XML feeds and results in username exposure. 
+If a user's display name is not set, the author's username is used instead. This is shown in links, archives, XML feeds and results in username exposure.
 
 This option prevents username exposure by replacing the author's display name with an anonymous string, only if the display name is equal to the login name.
 
 ### Disable PHP in uploads ###
 
-Option: `disable_php_in_uploads` - Default: `true` 
+Option: `disable_php_in_uploads` - Default: `true`
 
 Any files uploaded to the `uploads` directory are publicly accessible and therefore executable. This poses a security risk if a PHP file is uploaded.
 
@@ -118,7 +121,7 @@ This option writes to `.htaccess` to disable execution of any PHP files within t
 
 ### Disable XMLRPC ###
 
-Option: `disable_xmlrpc` - Default: `true` 
+Option: `disable_xmlrpc` - Default: `true`
 
 The XMLRPC endpoint becomes a target for brute force login attempts. If the feature is not it use it should be disabled.
 
@@ -126,7 +129,7 @@ This option blocks any access to `xmlrpc.php` using `.htaccess`.
 
 ### Disable README files ###
 
-Option: `disable_readme_files` - Default: `true` 
+Option: `disable_readme_files` - Default: `true`
 
 WordPress ships with `license.txt` and developers often include a `README.md` file with their projects. License files need not be publicly accessible and any readme file can contain potentially sensitive information.
 
@@ -134,11 +137,11 @@ This option blocks access to `license.txt` and `README.md` using `.htaccess`
 
 ### Disable file modifications ###
 
-Option: `disable_file_mods` - Default: `false` 
+Option: `disable_file_mods` - Default: `false`
 
 WordPress core files, themes and plugins can be manipulated via the WordPress. When such features are not required they should be disabled to prevent any malicous user from escalating their privileges and gaining file system access.
 
-This option disables editing of theme files, plugin files if the following constant is defined and set to `true`. 
+This option disables editing of theme files, plugin files if the following constant is defined and set to `true`.
 
 'Note:' This option will also disable automatic updates.
 
@@ -148,7 +151,7 @@ define('DISALLOW_FILE_MODS', true);
 
 ### Disable file edits ###
 
-Option: `disable_file_edit` - Default: `true` 
+Option: `disable_file_edit` - Default: `true`
 
 WordPress themes and plugins can be manipulated via the WordPress admin. When such features are not required they should be disabled to prevent any malicous user from escalating their privileges and gaining file system access.
 
@@ -160,7 +163,7 @@ define('DISALLOW_FILE_EDIT', true);
 
 ### Default table prefix warning ###
 
-Option: `default_table_prefix_warning` - Default: `true` 
+Option: `default_table_prefix_warning` - Default: `true`
 
 WordPress uses a default database table name prefix of `wp_`. Many simple SQL injection attacks assume the use of the default value. Changing the prefix helps protect against some basic attacks.
 
@@ -168,7 +171,7 @@ This option displays a warning to administrators if the default prefix has been 
 
 ### Default user warning ###
 
-Option: `default_user_warning` - Default: `true` 
+Option: `default_user_warning` - Default: `true`
 
 WordPress installs with a default administrator account named `admin`. Many brute force attacks assume this username exists and its presence reduces the effort required to guess login credentials.
 
@@ -176,47 +179,47 @@ The `admin` account should be deleted or renamed. This option warns administrato
 
 ### Default user prevention ###
 
-Option: `default_user_prevent` - Default: `true` 
+Option: `default_user_prevent` - Default: `true`
 
 This option prevents the creation of a user with the username `admin`
 
 ### Login log ###
 
-Option: `login_log` - Default: `true` 
+Option: `login_log` - Default: `true`
 
 This option enables logging of any login attempt, successful or otherwise.
 
 ### Login lock ###
 
-Option: `login_lock` - Default: `true` 
+Option: `login_lock` - Default: `true`
 
 Most WordPress websites receive a steady stream of brute force login attempts.
 
-This option locks `wp-login.php` when a number of failed login attempts is exceeded, preventing further attempts for a period of time. 
+This option locks `wp-login.php` when a number of failed login attempts is exceeded, preventing further attempts for a period of time.
 
-The default values are suitable for most websites and are designed to slow down brute force attacks, without erroneously blocking genuine users for prolonged periods of time. 
+The default values are suitable for most websites and are designed to slow down brute force attacks, without erroneously blocking genuine users for prolonged periods of time.
 
 ### Login maximum attempts ###
 
-Option: `login_max_attempts` - Default: `5` 
+Option: `login_max_attempts` - Default: `5`
 
 This option sets the maximum number of failed login attempts before `wp-login.php` is locked.
 
 ### Login retry interval ###
 
-Option: `login_retry_interval` - Default: `60` 
+Option: `login_retry_interval` - Default: `60`
 
 This option sets the time period in which a maximum number of failed logins attempts can occur before `wp-login.php` is locked.
 
 ### Login lock duration ###
 
-Option: `login_lock_duration` - Default: `60` 
+Option: `login_lock_duration` - Default: `60`
 
 This option sets the duration of a login lock.
 
 ### Enable Google reCAPTCHA ###
 
-Option: `enable_google_recaptcha` - Default: `true` 
+Option: `enable_google_recaptcha` - Default: `true`
 
 This option displays Google reCAPTCHA on `wp-login.php` to prevent automated login attempts.
 
@@ -229,7 +232,7 @@ define('RECAPTCHA_SECRET_KEY', '');
 
 ### Enable frame options header ###
 
-Option: `enable_frame_options` - Default: `true` 
+Option: `enable_frame_options` - Default: `true`
 
 This option provides additional cross-site scripting protection by sending the `X-Frame-Options` HTTP header in all requests. The `X-Frame-Options` header limits the rendering of pages to HTML frames which exist on the same domain name.
 
@@ -237,7 +240,7 @@ Sends: `X-Frame-Options: SAMEORIGIN`
 
 ### Enable XSS protection header ###
 
-Option: `enable_xss_protection` - Default: `true` 
+Option: `enable_xss_protection` - Default: `true`
 
 This option sends the `X-XSS-Protection` header in all requests to help block cross-site scripting attempts when detected by a supported browser. Support is included in IE8+ & Webkit.
 
@@ -245,7 +248,7 @@ Sends: `X-XSS-Protection: 1; mode=block;`
 
 ### Enable no sniff header ###
 
-Option: `enable_no_sniff` - Default: `true` 
+Option: `enable_no_sniff` - Default: `true`
 
 The options sends the `X-Content-Type-Options` header set to a value of `nosniff` which disables content type sniffing in browsers which support it.
 
@@ -253,4 +256,12 @@ This prevents browsers from attempting to determine a file's mime type automatic
 
 Sends: `X-Content-Type-Options: nosniff`
 
+### Two factor authentication warning ###
 
+Option: `two_factor_auth_warning` - Default: `true`
+
+If the [Two Factor Auth](https://wordpress.org/plugins/two-factor-auth/) plugin is missing, or if any user role has 2FA disabled, a warning notification will be displayed for administrators.
+
+Option: `two_factor_auth_admin_warning` - Default: `true`
+
+If administrator users have 2FA disabled, a warning notification will be displayed. When the `two_factor_auth_warning` option is set, this has no effect. However, it may be useful for encouraging 2FA for administrators even when it is disabled for client users.

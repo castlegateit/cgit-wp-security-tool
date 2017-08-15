@@ -20,6 +20,7 @@ class Plugin
         'Login',
         'Recaptcha',
         'Header',
+        'TwoFactorAuth',
     ];
 
     /**

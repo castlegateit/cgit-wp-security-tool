@@ -90,16 +90,14 @@ class Recaptcha extends Tool
     }
 
     /**
-     * Checks if Google reCAPTCHA should be disabled and sets a variable.
-     * It should be disabled in the presence of 2FA authentication.
+     * Checks if Google reCAPTCHA should be disabled and sets a variable. From
+     * version 2.6, reCAPTCHA should always be enabled.
      *
      * @return void
      */
     public function disable()
     {
-        if (defined('TFA_MAIN_PLUGIN_PATH')) {
-            $this->disabled = true;
-        }
+        return false;
     }
 
     /**
