@@ -126,9 +126,10 @@ class TwoFactorAuth extends \Cgit\SecurityTool\Tool
         $disabled = [];
 
         // Check the options table to identify any user roles for which 2FA has
-        // been disabled.
+        // been disabled. Use strict comparison: an empty string is a value that
+        // has been set; false means the option has never been set.
         foreach ($roles as $role) {
-            if (!get_option('tfa_' . $role)) {
+            if (get_option('tfa_' . $role) === '') {
                 $disabled[] = $this->roles[$role];
             }
         }
