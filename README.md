@@ -19,7 +19,6 @@ Provides some WordPress and general security enhancements:
 *   Sends the `X-Frame-Origin` HTTP header.
 *   Sends the `X-XSS-Protection` HTTP header.
 *   Sends the `X-Content-Type-Options` HTTP header.
-*   Warn administrators if 2FA is disabled.
 
 ## Options ##
 
@@ -47,8 +46,6 @@ $options = [
     'enable_frame_options' => true,
     'enable_xss_protection' => true,
     'enable_no_sniff' => true,
-    'two_factor_auth_warning' => true, // all user roles
-    'two_factor_auth_admin_warning' => true, // administrator user role
 ];
 ~~~
 
@@ -255,13 +252,3 @@ The options sends the `X-Content-Type-Options` header set to a value of `nosniff
 This prevents browsers from attempting to determine a file's mime type automatically, and forces rendering in the mime type provided by the server.
 
 Sends: `X-Content-Type-Options: nosniff`
-
-### Two factor authentication warning ###
-
-Option: `two_factor_auth_warning` - Default: `true`
-
-If the [Two Factor Auth](https://wordpress.org/plugins/two-factor-auth/) plugin is missing, or if any user role has 2FA disabled, a warning notification will be displayed for administrators.
-
-Option: `two_factor_auth_admin_warning` - Default: `true`
-
-If administrator users have 2FA disabled, a warning notification will be displayed. When the `two_factor_auth_warning` option is set, this has no effect. However, it may be useful for encouraging 2FA for administrators even when it is disabled for client users.
